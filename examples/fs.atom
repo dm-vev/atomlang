@@ -1,0 +1,9 @@
+var file = io.open("example.txt", "w");
+file->write("Hello, world!");
+file->close();
+
+file = io.open("example.txt", "r");
+var contents = file->read("*all");
+file->close();
+
+print(contents);
