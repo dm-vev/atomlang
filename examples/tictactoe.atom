@@ -1,0 +1,73 @@
+// функция для вывода поля
+var function printBoard(board) {
+  for( i = 1, 3 ) {
+    var row = {};
+    for( j = 1, 3 ) {
+      row[#row + 1] = board[i][j];
+    }
+    print(table.concat(row, " "));
+  }
+}
+
+// создаем новое игровое поле
+var board = {};
+for( i = 1, 3 ) {
+  board[i] = {};
+  for( j = 1, 3 ) {
+    board[i][j] = "-";
+  }
+}
+
+// игровой цикл
+var currentPlayer = "X";
+while( true ) {
+  printBoard(board);
+  io.write(currentPlayer .. "'s turn. Enter row and column (e.g. 1 2): ");
+  var row, col = io.read("*n", "*n");
+  if( board[row][col] == "-" ) {
+    board[row][col] = currentPlayer;
+  } else {
+    print("That spot is already taken!");
+  }
+
+  // проверяем, есть ли победитель
+  for( i = 1, 3 ) {
+    if( board[i][1] != "-" && board[i][1] == board[i][2] && board[i][2] == board[i][3] ) {
+      print(currentPlayer .. " wins!");
+      return;
+    }
+    if( board[1][i] != "-" && board[1][i] == board[2][i] && board[2][i] == board[3][i] ) {
+      print(currentPlayer .. " wins!");
+      return;
+    }
+  }
+  if( board[1][1] != "-" && board[1][1] == board[2][2] && board[2][2] == board[3][3] ) {
+    print(currentPlayer .. " wins!");
+    return;
+  }
+  if( board[1][3] != "-" && board[1][3] == board[2][2] && board[2][2] == board[3][1] ) {
+    print(currentPlayer .. " wins!");
+    return;
+  }
+
+  // переключаем игрока
+  if( currentPlayer == "X" ) {
+    currentPlayer = "O";
+  } else {
+    currentPlayer = "X";
+  }
+
+  // проверяем, есть ли ничья
+  var isTie = true;
+  for( i = 1, 3 ) {
+    for( j = 1, 3 ) {
+      if( board[i][j] == "-" ) {
+        isTie = false;
+      }
+    }
+  }
+  if( isTie ) {
+    print("Tie game!");
+    return;
+  }
+}
