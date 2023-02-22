@@ -1,0 +1,11 @@
+/ Функция вычисления факториала числа
+function factorial(n) {
+    if( n == 0 ) {
+        return 1;
+    } else {
+        return n * factorial(n-1);
+    }
+}
+
+// Пример вызова функции
+print(factorial(5)); // Выводит 120
