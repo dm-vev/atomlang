@@ -1,0 +1,12 @@
+function fibonacci(n) {
+    if( n < 2 ) {
+        return n;
+    } else {
+        return fibonacci(n-1) + fibonacci(n-2);
+    }
+}
+
+// Вычисляем первые 10 чисел Фибоначчи
+for( i=0,9 ) {
+    print(fibonacci(i));
+}
