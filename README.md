@@ -7,18 +7,18 @@ Atom компилируется в собственную виртуальную
 #### Зачем?
 Прежде всего, язык ставит перед собой цель стать языком для написания програм для низкопроизводительных устройств, а так-же для микроконтролерров. 
 
-##Примеры кода:
-####1. Hello world!
+## Примеры кода:
+#### 1. Hello world!
 ```js
 io.write("Hello world!\n");
 ```
-####2. Ввод от пользователя
+#### 2. Ввод от пользователя
 ```js
 io.write('Hello, what is your name? ')
 var name = io.read()
 io.write('Nice to meet you, ', name, '!\n')
 ```
-####3. Структуры
+#### 3. Структуры
 ```js
 var Car = {
 	speed : 0
@@ -32,7 +32,7 @@ io.write(Engine.speed); // 0
 Engine->speedTo(12); //вызов функции из структуры
 io.write(Engine.speed); // 12
 ```
-####4. Работа с файлами
+#### 4. Работа с файлами
 ```js
 var file = io.open("example.txt", "w");
 file->write("Hello, world!");
