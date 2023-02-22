@@ -1,0 +1,30 @@
+// while-цикл
+var i = 1;
+while( i <= 5 ) {
+  print("while-цикл: i = " .. i);
+  ++i    ;
+}
+
+// repeat-цикл
+i = 1;
+do {
+  print("repeat-цикл: i = " .. i);
+  ++i    ;
+} while(!( i > 5) );
+
+// for-цикл
+for( i = 1, 5 ) {
+  print("for-цикл: i = " .. i);
+}
+
+// pairs-цикл для итерации по таблице
+var my_table = {a = 1, b = 2, c = 3};
+for( key, value in pairs(my_table) ) {
+  print("pairs-цикл: " .. key .. " = " .. value);
+}
+
+// ipairs-цикл для итерации по списку
+var my_list = {10, 20, 30};
+for( index, value in ipairs(my_list) ) {
+  print("ipairs-цикл: " .. index .. " = " .. value);
+}
