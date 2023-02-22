@@ -28,9 +28,9 @@ function car::speedTo(v : integer) { // дополнение структуры
 	this.speed = v; // изменение локальной переменной speed
 }
 
-io.write(Engine.speed); // 0
-Engine->speedTo(12); //вызов функции из структуры
-io.write(Engine.speed); // 12
+io.write(Car.speed); // 0
+Car->speedTo(12); //вызов функции из структуры
+io.write(Car.speed); // 12
 ```
 #### 4. Работа с файлами
 ```js
