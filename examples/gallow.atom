@@ -1,0 +1,78 @@
+// список слов для игры
+var words = {"apple", "banana", "orange", "grape", "pear"};
+
+// функция для выбора случайного слова из списка
+var function choose_word() {
+    math.randomseed(os.time());
+    var index = math.random(1, #words);
+    return words[index];
+}
+
+// функция для проверки, входит ли буква в слово
+var function letter_in_word(word, letter) {
+    for( i = 1, #word ) {
+        if( word->sub(i, i) == letter ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// функция для замены символов слова на прочерки
+var function hide_word(word, guessed_letters) {
+    var hidden = "";
+    for( i = 1, #word ) {
+        var letter = word->sub(i, i);
+        if( guessed_letters[letter] ) {
+            hidden = hidden .. letter;
+        } else {
+            hidden = hidden .. "_";
+        }
+    }
+    return hidden;
+}
+
+// функция для печати текущего состояния игры
+var function print_state(word, guessed_letters, attempts_left) {
+    var hidden = hide_word(word, guessed_letters);
+    print(hidden);
+    print("Attempts left: " .. attempts_left);
+}
+
+// основная функция игры
+var function play_game() {
+    var word = choose_word();
+    var guessed_letters = {};
+    var attempts_left = 6;
+
+    while( attempts_left > 0 ) {
+        print_state(word, guessed_letters, attempts_left);
+
+        // запрос буквы у пользователя
+        io.write("Enter a letter: ");
+        var letter = io.read();
+        if( #letter != 1 ) {
+            print("Please enter a single letter.");
+        } else if( guessed_letters[letter] ) {
+            print("You already guessed that letter.");
+        } else {
+            guessed_letters[letter] = true;
+            if( letter_in_word(word, letter) ) {
+                print("Correct!");
+                if( hide_word(word, guessed_letters) == word ) {
+                    print("You win!");
+                    return;
+                }
+            } else {
+                print("Incorrect.");
+                --attempts_left    ;
+            }
+        }
+    }
+
+    print_state(word, guessed_letters, attempts_left);
+    print("You lose. The word was: " .. word);
+}
+
+// запуск игры
+play_game();
