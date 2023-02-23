@@ -43,6 +43,45 @@ var contents = file->read("*all");
 file->close();
 ```
 
+#### 5. Корутины
+```js
+function fibonacci(n) {
+    if( n < 2 ) {
+        return n;
+    } else {
+        return fibonacci(n-1) + fibonacci(n-2);
+    }
+}
+
+var start_time = os.time();
+for( i = 1, 40 ) {
+    print(fibonacci(i));
+}
+var end_time = os.time();
+print("(Without coroutines) Execution time: " .. (end_time - start_time) .. " seconds");
+
+function fibonacci_co(n) {
+    var function iter(a, b, count) {
+        if( count == 0 ) {
+            return a;
+        } else {
+            coroutine.yield(a);
+            return iter(b, a + b, count - 1);
+        }
+    }
+
+    return coroutine.wrap(function() { iter(0, 1, n); });
+}
+
+var start_time2 = os.time();
+for( fib in fibonacci_co(40) ) {
+    print(fib);
+}
+var end_time2 = os.time();
+print("(With coroutines) Execution time: " .. (end_time - start_time) .. " seconds");
+
+```
+
 Больше примеров Вы сможете найти в папке **examples**.
 
 ## Использование
