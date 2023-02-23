@@ -1,0 +1,13 @@
+function foo() {
+  print("Hello from foo");
+  coroutine.yield();
+  print("Hello again from foo");
+}
+
+co = coroutine.create(foo);
+
+print("Starting coroutine");
+coroutine.resume(co);
+print("Resuming coroutine");
+coroutine.resume(co);
+print("Coroutine finished");
