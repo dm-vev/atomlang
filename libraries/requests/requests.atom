@@ -1,0 +1,129 @@
+/*
+Библиотека requests, позволяет отправлять GET, POST, PUT запросы.
+*/
+
+require("libnet")
+
+requests = {
+    debug: false;
+}
+
+function requests::log(text) {
+    if (this.debug) io.write(text .. "\n"); // если дебаг включен, то выводим сообщения для отладки
+}
+
+function requests::get(host, port, path) {
+
+    var sockfd = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0); //создаем сокет
+    this->log("Init socket... (host: " .. host .. " port: " .. port .. " path: " .. path .. " )");
+    socket.connect(host, 80, sockfd); // подключаемся
+    this->log("Connecting...");
+
+    socket.send(sockfd, "GET " .. path .. " HTTP/1.1\r\nHost: " .. host .. "\r\nConnection: close\r\n\r\n"); // отправляем запрос
+    this->log("Sending HTTP GET...");    
+
+    var data = socket.recv(sockfd); // получем запрос
+    this->log("Recieving data");
+
+    var response = {};
+    response.code = tonumber(data->match("^HTTP/%d%.%d (%d%d%d)")); // парсим код из сырого запроса
+    response.data = data;
+
+    headers_end = data->find("\r\n\r\n"); // обрезаем запрос
+    if (headers_end) {
+        response.headers = data->sub(1, headers_end - 1) // парсим заголовки
+        response.body = data->sub(headers_end + 4) // парсим основное тело
+    
+        var success, result = pcall(function(){ return assert(load("return " .. response.body))() });
+        if (success) response.json = result;
+        
+        this->log("Parsing...");
+    }
+    socket.close(sockfd); // закрываем сокет
+    this->log("Closing socket(" .. sockfd .. ")");
+    return response; // возвращаем словарь с ответом
+}
+
+function requests::post(host, port, path, data) {
+    var sockfd = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0); // создаем сокет
+    this->log("Init socket... (host: " .. host .. " port: " .. port .. " path: " .. path .. " )");
+    socket.connect(host, 80, sockfd); // подключаемся
+    this->log("Connecting...");
+    var req = "POST " .. path .. " HTTP/1.1\r\n" ..
+        "Host: " .. host .. "\r\n" ..
+        "Content-Type: application/x-www-form-urlencoded\r\n" ..
+        "Content-Length: " .. tostring(#data) .. "\r\n" ..
+        "Connection: close\r\n\r\n" ..
+        data;
+    socket.send(sockfd, req);
+    this->log("Sending POST");
+
+    var response = {};
+    response.code = tonumber(data->match("^HTTP/%d%.%d (%d%d%d)")); // парсим код из сырого запроса
+    response.data = data;
+
+    headers_end = data->find("\r\n\r\n"); // обрезаем запрос
+    if (headers_end) {
+        response.headers = data->sub(1, headers_end - 1) // парсим заголовки
+        response.body = data->sub(headers_end + 4) // парсим основное тело
+    
+        var success, result = pcall(function(){ return assert(load("return " .. response.body))() });
+        if (success) response.json = result;
+        
+        this->log("Parsing...");
+    }
+    socket.close(sockfd); // закрываем сокет
+    this->log("Closing socket(" .. sockfd .. ")");
+    return response; // возвращаем словарь с ответом
+    
+}
+
+function requests::put(host, port, path, data) {
+    var sockfd = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0); // создаем сокет
+    this->log("Init socket... (host: " .. host .. " port: " .. port .. " path: " .. path .. " )");
+    socket.connect(host, 80, sockfd); // подключаемся
+    this->log("Connecting...");
+    var req = "PUT " .. path .. " HTTP/1.1\r\n" ..
+        "Host: " .. host .. "\r\n" ..
+        "Content-Type: application/x-www-form-urlencoded\r\n" ..
+        "Content-Length: " .. tostring(#data) .. "\r\n" ..
+        "Connection: close\r\n\r\n" ..
+        data;
+    socket.send(sockfd, req); // Отправляем запрос
+    this->log("Sending PUT");
+
+    var response = {};
+    response.code = tonumber(data->match("^HTTP/%d%.%d (%d%d%d)")); // парсим код из сырого запроса
+    response.data = data;
+
+    headers_end = data->find("\r\n\r\n"); // обрезаем запрос
+    if (headers_end) {
+        response.headers = data->sub(1, headers_end - 1) // парсим заголовки
+        response.body = data->sub(headers_end + 4) // парсим основное тело
+    
+        var success, result = pcall(function(){ return assert(load("return " .. response.body))() });
+        if (success) response.json = result;
+        
+        this->log("Parsing...");
+    }
+    socket.close(sockfd); // закрываем сокет
+    this->log("Closing socket(" .. sockfd .. ")");
+    return response; // возвращаем словарь с ответом
+    
+}
+
+/*
+// пример GET запроса
+var response = requests->get("localhost", 80, "/");
+print("data: " .. response.data);
+print("body: " .. response.body);
+print("headers: " .. response.headers);
+//print("json" .. response.json.test);
+
+
+// пример POST/PUT запроса
+var response = requests->post("httpbin.org", 80, "/post", "hello world");
+print("data " .. response.data);
+print("body " .. response.body);
+print("headers " .. response.headers);
+*/
