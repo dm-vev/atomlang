@@ -82,7 +82,7 @@ print("(With coroutines) Execution time: " .. (end_time - start_time) .. " secon
 
 ```
 
-6. Работа с сетью и внешними библиотеками
+#### 6. Работа с сетью и внешними библиотеками
 ```js
 require("libnet") // Обратите внимание, требуется отедльная библиотека для работы с сетью. Ее можно найти в lib/libnet/libnet.so
 
