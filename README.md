@@ -82,6 +82,20 @@ print("(With coroutines) Execution time: " .. (end_time - start_time) .. " secon
 
 ```
 
+6. Работа с сетью и внешними библиотеками
+```js
+require("libnet") // Обратите внимание, требуется отедльная библиотека для работы с сетью. Ее можно найти в lib/libnet/libnet.so
+
+sockfd = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0) // Создаем сокет
+socket.connect("localhost", 80, sockfd) // Подключаемся
+socket.send(sockfd, "GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n") // Отправляем данные
+
+var response = socket.recv(sockfd) // Читаем данные
+socket.close(sockfd) // Закрываем сокет
+
+io.write(response) // Выводим результат
+```
+
 Больше примеров Вы сможете найти в папке **examples**.
 
 ## Использование
